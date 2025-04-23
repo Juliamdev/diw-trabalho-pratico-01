@@ -158,3 +158,25 @@ header h1 {
         padding: 10px;
     }
 }
+/* === Galeria de Fotos Vinculadas === */
+#fotosVinculadas .row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+/* === Estilo das imagens na galeria === */
+#fotosVinculadas img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    object-fit: cover;
+}
+
+/* === Ajuste para telas pequenas (mobile) com 3 imagens por linha === */
+@media (max-width: 767px) {
+    #fotosVinculadas .row {
+        grid-template-columns: repeat(3, 1fr); /* 3 imagens por linha */
+    }
+}

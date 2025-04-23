@@ -12,26 +12,32 @@
     <div id="listaNoticias" class="row row-cols-1 row-cols-md-2 g-4"></div>
     <a href="index.html" class="btn btn-secondary mt-4">Voltar à página inicial</a>
   </div>
+
   <div class="container mt-5">
     <h2 class="mb-4">Fotos vinculadas</h2>
     <div id="fotosVinculadas" class="row row-cols-1 row-cols-md-2 g-4"></div>
   </div>
 
+  <!-- Arquivo com os dados -->
   <script src="assets/js/app.js"></script>
+
+  <!-- Script de exibição por categoria -->
   <script>
     window.onload = function () {
       const params = new URLSearchParams(location.search);
       const categoria = params.get("categoria");
-  
+
       document.getElementById("tituloCategoria").textContent = `Notícias de ${categoria}`;
-  
+
       const lista = document.getElementById("listaNoticias");
-  
+      const fotosDiv = document.getElementById("fotosVinculadas");
+
       if (typeof dados !== 'undefined') {
         const noticiasFiltradas = dados.filter(n => n.categoria.toLowerCase() === categoria.toLowerCase());
-  
+
         if (noticiasFiltradas.length > 0) {
           noticiasFiltradas.forEach(noticia => {
+            // Card da notícia
             const card = `
               <div class="col">
                 <div class="card h-100">
@@ -45,40 +51,50 @@
               </div>
             `;
             lista.innerHTML += card;
+
+            // Fotos simples (array `fotos`)
+            if (noticia.fotos && noticia.fotos.length > 0) {
+              noticia.fotos.forEach(foto => {
+                const fotoHTML = `
+                  <div class="col">
+                    <div class="card h-100">
+                      <img src="${foto.url}" class="card-img-top" alt="${foto.titulo}">
+                      <div class="card-body">
+                        <h5 class="card-title">${foto.titulo}</h5>
+                      </div>
+                    </div>
+                  </div>
+                `;
+                fotosDiv.innerHTML += fotoHTML;
+              });
+            }
+
+            // Imagens complementares (array `imagens_complementares`)
+            if (noticia.imagens_complementares && noticia.imagens_complementares.length > 0) {
+              noticia.imagens_complementares.forEach(imagem => {
+                const imgHTML = `
+                  <div class="col">
+                    <div class="card h-100">
+                      <img src="${imagem.src}" class="card-img-top" alt="${imagem.descricao}">
+                      <div class="card-body">
+                        <h5 class="card-title">${imagem.descricao}</h5>
+                      </div>
+                    </div>
+                  </div>
+                `;
+                fotosDiv.innerHTML += imgHTML;
+              });
+            }
           });
         } else {
           lista.innerHTML = "<p>Nenhuma notícia encontrada nesta categoria.</p>";
+          fotosDiv.innerHTML = "<p>Nenhuma foto vinculada a esta categoria.</p>";
         }
       } else {
         lista.innerHTML = "<p>Erro: dados não carregados.</p>";
+        fotosDiv.innerHTML = "<p>Erro: dados não carregados.</p>";
       }
     };
-    const noticia = dados.find(n => n.id == id);
-
-if (noticia) {
-  // ... (exibe título, descrição, etc)
-
-  // Mostrar as fotos vinculadas
-  const fotosDiv = document.getElementById("fotosVinculadas");
-  if (noticia.fotos && noticia.fotos.length > 0) {
-    noticia.fotos.forEach(foto => {
-      const fotoHTML = `
-        <div class="col">
-          <div class="card h-100">
-            <img src="${foto.url}" class="card-img-top" alt="${foto.titulo}">
-            <div class="card-body">
-              <h5 class="card-title">${foto.titulo}</h5>
-            </div>
-          </div>
-        </div>
-      `;
-      fotosDiv.innerHTML += fotoHTML;
-    });
-  } else {
-    fotosDiv.innerHTML = "<p>Nenhuma foto vinculada a esta notícia.</p>";
-  }
-}
   </script>
-  
 </body>
 </html>
